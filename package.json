@@ -1,0 +1,32 @@
+{
+  "name": "vue-leaflet-measure",
+  "version": "0.0.1",
+  "description": "Coordinate, linear, and area measure control for vue-leaflet",
+  "main": "./src/LMeasure.vue",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegocardoso93/vue-leaflet-measure.git"
+  },
+  "keywords": [
+    "vue",
+    "vue-leaflet",
+    "leaflet",
+    "measure",
+    "measurement",
+    "control",
+    "coordinate",
+    "line",
+    "length",
+    "area",
+    "polygon",
+    "path"
+  ],
+  "author": "Diego Cardoso",
+  "license": "MIT",
+  "homepage": "https://github.com/diegocardoso93/vue-leaflet-measure#readme",
+  "dependencies": {
+    "@turf/area": "^5.1.5",
+    "@turf/length": "^5.1.5",
+    "leaflet": "^1.8.0"
+  }
+}
