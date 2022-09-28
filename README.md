@@ -9,7 +9,8 @@ based on https://github.com/ljagis/leaflet-measure
 - inside template l-map add
 ```javascript
 
-<l-map @ready="onMapReady">
+<l-map :maxZoom="17" @ready="onMapReady" :use-global-leaflet="true">
+  ...
   <l-measure :mapRef="mapRef" />
   ...
 </l-map>
@@ -22,6 +23,9 @@ import { ref } from "vue";
 import { LMap } from "@vue-leaflet/vue-leaflet";
 import LMeasure from "vue-leaflet-measure";
 
+import "leaflet/dist/leaflet.css";
+import "../node_modules/vue-leaflet-measure/dist/style.css";
+
 const mapRef = ref();
 
 function onMapReady(map) {
@@ -29,4 +33,3 @@ function onMapReady(map) {
 }
 </script>
 ```
-

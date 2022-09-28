@@ -92,8 +92,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref, toRefs } from "vue";
+import { ref, toRefs, inject, watch } from "vue";
 import { loadLeafletMeasure, numberFormat } from "./leaflet-measure";
+
+const WINDOW_OR_GLOBAL =
+  (typeof self === "object" && self.self === self && self) ||
+  (typeof global === "object" && global.global === global && global) ||
+  undefined;
 
 const props = defineProps(["mapRef"]);
 const { mapRef } = toRefs(props);
@@ -106,23 +111,29 @@ const resultsTemplateRef = ref();
 
 const model = ref({});
 
-onMounted(async () => {
-  const L = await import("leaflet/dist/leaflet-src.esm");
+const useGlobalLeaflet = inject("useGlobalLeaflet");
+
+watch(mapRef, async (map) => {
+  const L = useGlobalLeaflet
+    ? WINDOW_OR_GLOBAL.L
+    : await import("leaflet/dist/leaflet-src.esm");
 
   loadLeafletMeasure(L);
 
-  new L.Control.Measure({
-    primaryLengthUnit: "meters",
-    secondaryLengthUnit: "kilometers",
-    primaryAreaUnit: "sqmeters",
-    secondaryAreaUnit: "sqkilometers",
-    controlTemplateRef,
-    pointPopupTemplateRef,
-    areaPopupTemplateRef,
-    linePopupTemplateRef,
-    resultsTemplateRef,
-    model: model,
-  }).addTo(mapRef.value);
+  if (mapRef.value) {
+    new L.Control.Measure({
+      primaryLengthUnit: "meters",
+      secondaryLengthUnit: "kilometers",
+      primaryAreaUnit: "sqmeters",
+      secondaryAreaUnit: "sqkilometers",
+      controlTemplateRef,
+      pointPopupTemplateRef,
+      areaPopupTemplateRef,
+      linePopupTemplateRef,
+      resultsTemplateRef,
+      model: model,
+    }).addTo(map);
+  }
 });
 </script>
 
