@@ -1,5 +1,5 @@
-import { toRefs, ref, inject, watch, openBlock, createElementBlock, createElementVNode, createTextVNode, toDisplayString, unref, createCommentVNode, createStaticVNode } from "vue";
-var units = {
+import { toRefs as re, ref as S, inject as ie, watch as ae, openBlock as B, createElementBlock as R, createElementVNode as c, createTextVNode as C, toDisplayString as y, unref as N, createCommentVNode as J, createStaticVNode as oe } from "vue";
+const ne = {
   acres: {
     factor: 24711e-8,
     display: "acres",
@@ -51,469 +51,370 @@ var units = {
     decimals: 2
   }
 };
-var earthRadius = 63710088e-1;
-var factors = {
-  meters: earthRadius,
-  metres: earthRadius,
-  millimeters: earthRadius * 1e3,
-  millimetres: earthRadius * 1e3,
-  centimeters: earthRadius * 100,
-  centimetres: earthRadius * 100,
-  kilometers: earthRadius / 1e3,
-  kilometres: earthRadius / 1e3,
-  miles: earthRadius / 1609.344,
-  nauticalmiles: earthRadius / 1852,
-  inches: earthRadius * 39.37,
-  yards: earthRadius / 1.0936,
-  feet: earthRadius * 3.28084,
+var p = 63710088e-1, le = {
+  meters: p,
+  metres: p,
+  millimeters: p * 1e3,
+  millimetres: p * 1e3,
+  centimeters: p * 100,
+  centimetres: p * 100,
+  kilometers: p / 1e3,
+  kilometres: p / 1e3,
+  miles: p / 1609.344,
+  nauticalmiles: p / 1852,
+  inches: p * 39.37,
+  yards: p / 1.0936,
+  feet: p * 3.28084,
   radians: 1,
-  degrees: earthRadius / 111325
+  degrees: p / 111325
 };
-function feature(geometry, properties, options) {
-  options = options || {};
-  if (!isObject(options))
+function q(e, s, t) {
+  if (t = t || {}, !z(t))
     throw new Error("options is invalid");
-  var bbox = options.bbox;
-  var id = options.id;
-  if (geometry === void 0)
+  var r = t.bbox, i = t.id;
+  if (e === void 0)
     throw new Error("geometry is required");
-  if (properties && properties.constructor !== Object)
+  if (s && s.constructor !== Object)
     throw new Error("properties must be an Object");
-  if (bbox)
-    validateBBox(bbox);
-  if (id)
-    validateId(id);
-  var feat = { type: "Feature" };
-  if (id)
-    feat.id = id;
-  if (bbox)
-    feat.bbox = bbox;
-  feat.properties = properties || {};
-  feat.geometry = geometry;
-  return feat;
+  r && he(r), i && fe(i);
+  var a = { type: "Feature" };
+  return i && (a.id = i), r && (a.bbox = r), a.properties = s || {}, a.geometry = e, a;
 }
-function lineString(coordinates, properties, options) {
-  if (!coordinates)
+function ue(e, s, t) {
+  if (!e)
     throw new Error("coordinates is required");
-  if (coordinates.length < 2)
+  if (e.length < 2)
     throw new Error("coordinates must be an array of two or more positions");
-  if (!isNumber(coordinates[0][1]) || !isNumber(coordinates[0][1]))
+  if (!L(e[0][1]) || !L(e[0][1]))
     throw new Error("coordinates must contain numbers");
-  return feature({
+  return q({
     type: "LineString",
-    coordinates
-  }, properties, options);
+    coordinates: e
+  }, s, t);
 }
-function radiansToLength(radians, units2) {
-  if (radians === void 0 || radians === null)
+function ce(e, s) {
+  if (e == null)
     throw new Error("radians is required");
-  if (units2 && typeof units2 !== "string")
+  if (s && typeof s != "string")
     throw new Error("units must be a string");
-  var factor = factors[units2 || "kilometers"];
-  if (!factor)
-    throw new Error(units2 + " units is invalid");
-  return radians * factor;
+  var t = le[s || "kilometers"];
+  if (!t)
+    throw new Error(s + " units is invalid");
+  return e * t;
 }
-function degreesToRadians(degrees) {
-  if (degrees === null || degrees === void 0)
+function x(e) {
+  if (e == null)
     throw new Error("degrees is required");
-  var radians = degrees % 360;
-  return radians * Math.PI / 180;
+  var s = e % 360;
+  return s * Math.PI / 180;
 }
-function isNumber(num) {
-  return !isNaN(num) && num !== null && !Array.isArray(num);
+function L(e) {
+  return !isNaN(e) && e !== null && !Array.isArray(e);
 }
-function isObject(input) {
-  return !!input && input.constructor === Object;
+function z(e) {
+  return !!e && e.constructor === Object;
 }
-function validateBBox(bbox) {
-  if (!bbox)
+function he(e) {
+  if (!e)
     throw new Error("bbox is required");
-  if (!Array.isArray(bbox))
+  if (!Array.isArray(e))
     throw new Error("bbox must be an Array");
-  if (bbox.length !== 4 && bbox.length !== 6)
+  if (e.length !== 4 && e.length !== 6)
     throw new Error("bbox must be an Array of 4 or 6 numbers");
-  bbox.forEach(function(num) {
-    if (!isNumber(num))
+  e.forEach(function(s) {
+    if (!L(s))
       throw new Error("bbox must only contain numbers");
   });
 }
-function validateId(id) {
-  if (!id)
+function fe(e) {
+  if (!e)
     throw new Error("id is required");
-  if (["string", "number"].indexOf(typeof id) === -1)
+  if (["string", "number"].indexOf(typeof e) === -1)
     throw new Error("id must be a number or a string");
 }
-function getCoord(coord) {
-  if (!coord)
+function Z(e) {
+  if (!e)
     throw new Error("coord is required");
-  if (coord.type === "Feature" && coord.geometry !== null && coord.geometry.type === "Point")
-    return coord.geometry.coordinates;
-  if (coord.type === "Point")
-    return coord.coordinates;
-  if (Array.isArray(coord) && coord.length >= 2 && coord[0].length === void 0 && coord[1].length === void 0)
-    return coord;
+  if (e.type === "Feature" && e.geometry !== null && e.geometry.type === "Point")
+    return e.geometry.coordinates;
+  if (e.type === "Point")
+    return e.coordinates;
+  if (Array.isArray(e) && e.length >= 2 && e[0].length === void 0 && e[1].length === void 0)
+    return e;
   throw new Error("coord must be GeoJSON Point or an Array of numbers");
 }
-function distance(from, to, options) {
-  options = options || {};
-  if (!isObject(options))
+function me(e, s, t) {
+  if (t = t || {}, !z(t))
     throw new Error("options is invalid");
-  var units2 = options.units;
-  var coordinates1 = getCoord(from);
-  var coordinates2 = getCoord(to);
-  var dLat = degreesToRadians(coordinates2[1] - coordinates1[1]);
-  var dLon = degreesToRadians(coordinates2[0] - coordinates1[0]);
-  var lat1 = degreesToRadians(coordinates1[1]);
-  var lat2 = degreesToRadians(coordinates2[1]);
-  var a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
-  return radiansToLength(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)), units2);
+  var r = t.units, i = Z(e), a = Z(s), u = x(a[1] - i[1]), l = x(a[0] - i[0]), o = x(i[1]), n = x(a[1]), f = Math.pow(Math.sin(u / 2), 2) + Math.pow(Math.sin(l / 2), 2) * Math.cos(o) * Math.cos(n);
+  return ce(2 * Math.atan2(Math.sqrt(f), Math.sqrt(1 - f)), r);
 }
-function coordEach(geojson, callback, excludeWrapCoord) {
-  if (geojson === null)
-    return;
-  var j, k, l, geometry, stopG, coords, geometryMaybeCollection, wrapShrink = 0, coordIndex = 0, isGeometryCollection, type = geojson.type, isFeatureCollection = type === "FeatureCollection", isFeature = type === "Feature", stop = isFeatureCollection ? geojson.features.length : 1;
-  for (var featureIndex = 0; featureIndex < stop; featureIndex++) {
-    geometryMaybeCollection = isFeatureCollection ? geojson.features[featureIndex].geometry : isFeature ? geojson.geometry : geojson;
-    isGeometryCollection = geometryMaybeCollection ? geometryMaybeCollection.type === "GeometryCollection" : false;
-    stopG = isGeometryCollection ? geometryMaybeCollection.geometries.length : 1;
-    for (var geomIndex = 0; geomIndex < stopG; geomIndex++) {
-      var multiFeatureIndex = 0;
-      var geometryIndex = 0;
-      geometry = isGeometryCollection ? geometryMaybeCollection.geometries[geomIndex] : geometryMaybeCollection;
-      if (geometry === null)
-        continue;
-      coords = geometry.coordinates;
-      var geomType = geometry.type;
-      wrapShrink = excludeWrapCoord && (geomType === "Polygon" || geomType === "MultiPolygon") ? 1 : 0;
-      switch (geomType) {
-        case null:
-          break;
-        case "Point":
-          if (callback(coords, coordIndex, featureIndex, multiFeatureIndex, geometryIndex) === false)
-            return false;
-          coordIndex++;
-          multiFeatureIndex++;
-          break;
-        case "LineString":
-        case "MultiPoint":
-          for (j = 0; j < coords.length; j++) {
-            if (callback(coords[j], coordIndex, featureIndex, multiFeatureIndex, geometryIndex) === false)
-              return false;
-            coordIndex++;
-            if (geomType === "MultiPoint")
-              multiFeatureIndex++;
-          }
-          if (geomType === "LineString")
-            multiFeatureIndex++;
-          break;
-        case "Polygon":
-        case "MultiLineString":
-          for (j = 0; j < coords.length; j++) {
-            for (k = 0; k < coords[j].length - wrapShrink; k++) {
-              if (callback(coords[j][k], coordIndex, featureIndex, multiFeatureIndex, geometryIndex) === false)
-                return false;
-              coordIndex++;
-            }
-            if (geomType === "MultiLineString")
-              multiFeatureIndex++;
-            if (geomType === "Polygon")
-              geometryIndex++;
-          }
-          if (geomType === "Polygon")
-            multiFeatureIndex++;
-          break;
-        case "MultiPolygon":
-          for (j = 0; j < coords.length; j++) {
-            if (geomType === "MultiPolygon")
-              geometryIndex = 0;
-            for (k = 0; k < coords[j].length; k++) {
-              for (l = 0; l < coords[j][k].length - wrapShrink; l++) {
-                if (callback(coords[j][k][l], coordIndex, featureIndex, multiFeatureIndex, geometryIndex) === false)
-                  return false;
-                coordIndex++;
+function ee(e, s, t) {
+  if (e !== null)
+    for (var r, i, a, u, l, o, n, f = 0, h = 0, m, d = e.type, M = d === "FeatureCollection", P = d === "Feature", A = M ? e.features.length : 1, b = 0; b < A; b++) {
+      n = M ? e.features[b].geometry : P ? e.geometry : e, m = n ? n.type === "GeometryCollection" : !1, l = m ? n.geometries.length : 1;
+      for (var D = 0; D < l; D++) {
+        var _ = 0, k = 0;
+        if (u = m ? n.geometries[D] : n, u !== null) {
+          o = u.coordinates;
+          var g = u.type;
+          switch (f = t && (g === "Polygon" || g === "MultiPolygon") ? 1 : 0, g) {
+            case null:
+              break;
+            case "Point":
+              if (s(o, h, b, _, k) === !1)
+                return !1;
+              h++, _++;
+              break;
+            case "LineString":
+            case "MultiPoint":
+              for (r = 0; r < o.length; r++) {
+                if (s(o[r], h, b, _, k) === !1)
+                  return !1;
+                h++, g === "MultiPoint" && _++;
               }
-              geometryIndex++;
-            }
-            multiFeatureIndex++;
+              g === "LineString" && _++;
+              break;
+            case "Polygon":
+            case "MultiLineString":
+              for (r = 0; r < o.length; r++) {
+                for (i = 0; i < o[r].length - f; i++) {
+                  if (s(o[r][i], h, b, _, k) === !1)
+                    return !1;
+                  h++;
+                }
+                g === "MultiLineString" && _++, g === "Polygon" && k++;
+              }
+              g === "Polygon" && _++;
+              break;
+            case "MultiPolygon":
+              for (r = 0; r < o.length; r++) {
+                for (g === "MultiPolygon" && (k = 0), i = 0; i < o[r].length; i++) {
+                  for (a = 0; a < o[r][i].length - f; a++) {
+                    if (s(o[r][i][a], h, b, _, k) === !1)
+                      return !1;
+                    h++;
+                  }
+                  k++;
+                }
+                _++;
+              }
+              break;
+            case "GeometryCollection":
+              for (r = 0; r < u.geometries.length; r++)
+                if (ee(u.geometries[r], s, t) === !1)
+                  return !1;
+              break;
+            default:
+              throw new Error("Unknown Geometry Type");
           }
-          break;
-        case "GeometryCollection":
-          for (j = 0; j < geometry.geometries.length; j++)
-            if (coordEach(geometry.geometries[j], callback, excludeWrapCoord) === false)
-              return false;
-          break;
-        default:
-          throw new Error("Unknown Geometry Type");
+        }
       }
     }
-  }
 }
-function geomEach(geojson, callback) {
-  var i, j, g, geometry, stopG, geometryMaybeCollection, isGeometryCollection, featureProperties, featureBBox, featureId, featureIndex = 0, isFeatureCollection = geojson.type === "FeatureCollection", isFeature = geojson.type === "Feature", stop = isFeatureCollection ? geojson.features.length : 1;
-  for (i = 0; i < stop; i++) {
-    geometryMaybeCollection = isFeatureCollection ? geojson.features[i].geometry : isFeature ? geojson.geometry : geojson;
-    featureProperties = isFeatureCollection ? geojson.features[i].properties : isFeature ? geojson.properties : {};
-    featureBBox = isFeatureCollection ? geojson.features[i].bbox : isFeature ? geojson.bbox : void 0;
-    featureId = isFeatureCollection ? geojson.features[i].id : isFeature ? geojson.id : void 0;
-    isGeometryCollection = geometryMaybeCollection ? geometryMaybeCollection.type === "GeometryCollection" : false;
-    stopG = isGeometryCollection ? geometryMaybeCollection.geometries.length : 1;
-    for (g = 0; g < stopG; g++) {
-      geometry = isGeometryCollection ? geometryMaybeCollection.geometries[g] : geometryMaybeCollection;
-      if (geometry === null) {
-        if (callback(null, featureIndex, featureProperties, featureBBox, featureId) === false)
-          return false;
+function te(e, s) {
+  var t, r, i, a, u, l, o, n, f, h, m = 0, d = e.type === "FeatureCollection", M = e.type === "Feature", P = d ? e.features.length : 1;
+  for (t = 0; t < P; t++) {
+    for (l = d ? e.features[t].geometry : M ? e.geometry : e, n = d ? e.features[t].properties : M ? e.properties : {}, f = d ? e.features[t].bbox : M ? e.bbox : void 0, h = d ? e.features[t].id : M ? e.id : void 0, o = l ? l.type === "GeometryCollection" : !1, u = o ? l.geometries.length : 1, i = 0; i < u; i++) {
+      if (a = o ? l.geometries[i] : l, a === null) {
+        if (s(null, m, n, f, h) === !1)
+          return !1;
         continue;
       }
-      switch (geometry.type) {
+      switch (a.type) {
         case "Point":
         case "LineString":
         case "MultiPoint":
         case "Polygon":
         case "MultiLineString":
         case "MultiPolygon": {
-          if (callback(geometry, featureIndex, featureProperties, featureBBox, featureId) === false)
-            return false;
+          if (s(a, m, n, f, h) === !1)
+            return !1;
           break;
         }
         case "GeometryCollection": {
-          for (j = 0; j < geometry.geometries.length; j++) {
-            if (callback(geometry.geometries[j], featureIndex, featureProperties, featureBBox, featureId) === false)
-              return false;
-          }
+          for (r = 0; r < a.geometries.length; r++)
+            if (s(a.geometries[r], m, n, f, h) === !1)
+              return !1;
           break;
         }
         default:
           throw new Error("Unknown Geometry Type");
       }
     }
-    featureIndex++;
+    m++;
   }
 }
-function geomReduce(geojson, callback, initialValue) {
-  var previousValue = initialValue;
-  geomEach(geojson, function(currentGeometry, featureIndex, featureProperties, featureBBox, featureId) {
-    if (featureIndex === 0 && initialValue === void 0)
-      previousValue = currentGeometry;
-    else
-      previousValue = callback(previousValue, currentGeometry, featureIndex, featureProperties, featureBBox, featureId);
-  });
-  return previousValue;
+function pe(e, s, t) {
+  var r = t;
+  return te(e, function(i, a, u, l, o) {
+    a === 0 && t === void 0 ? r = i : r = s(r, i, a, u, l, o);
+  }), r;
 }
-function flattenEach(geojson, callback) {
-  geomEach(geojson, function(geometry, featureIndex, properties, bbox, id) {
-    var type = geometry === null ? null : geometry.type;
-    switch (type) {
+function de(e, s) {
+  te(e, function(t, r, i, a, u) {
+    var l = t === null ? null : t.type;
+    switch (l) {
       case null:
       case "Point":
       case "LineString":
       case "Polygon":
-        if (callback(feature(geometry, properties, { bbox, id }), featureIndex, 0) === false)
-          return false;
-        return;
+        return s(q(t, i, { bbox: a, id: u }), r, 0) === !1 ? !1 : void 0;
     }
-    var geomType;
-    switch (type) {
+    var o;
+    switch (l) {
       case "MultiPoint":
-        geomType = "Point";
+        o = "Point";
         break;
       case "MultiLineString":
-        geomType = "LineString";
+        o = "LineString";
         break;
       case "MultiPolygon":
-        geomType = "Polygon";
+        o = "Polygon";
         break;
     }
-    for (var multiFeatureIndex = 0; multiFeatureIndex < geometry.coordinates.length; multiFeatureIndex++) {
-      var coordinate = geometry.coordinates[multiFeatureIndex];
-      var geom = {
-        type: geomType,
-        coordinates: coordinate
+    for (var n = 0; n < t.coordinates.length; n++) {
+      var f = t.coordinates[n], h = {
+        type: o,
+        coordinates: f
       };
-      if (callback(feature(geom, properties), featureIndex, multiFeatureIndex) === false)
-        return false;
+      if (s(q(h, i), r, n) === !1)
+        return !1;
     }
   });
 }
-function segmentEach(geojson, callback) {
-  flattenEach(geojson, function(feature$$1, featureIndex, multiFeatureIndex) {
-    var segmentIndex = 0;
-    if (!feature$$1.geometry)
-      return;
-    var type = feature$$1.geometry.type;
-    if (type === "Point" || type === "MultiPoint")
-      return;
-    var previousCoords;
-    if (coordEach(feature$$1, function(currentCoord, coordIndex, featureIndexCoord, mutliPartIndexCoord, geometryIndex) {
-      if (previousCoords === void 0) {
-        previousCoords = currentCoord;
-        return;
+function _e(e, s) {
+  de(e, function(t, r, i) {
+    var a = 0;
+    if (!!t.geometry) {
+      var u = t.geometry.type;
+      if (!(u === "Point" || u === "MultiPoint")) {
+        var l;
+        if (ee(t, function(o, n, f, h, m) {
+          if (l === void 0) {
+            l = o;
+            return;
+          }
+          var d = ue([l, o], t.properties);
+          if (s(d, r, i, m, a) === !1)
+            return !1;
+          a++, l = o;
+        }) === !1)
+          return !1;
       }
-      var currentSegment = lineString([previousCoords, currentCoord], feature$$1.properties);
-      if (callback(currentSegment, featureIndex, multiFeatureIndex, geometryIndex, segmentIndex) === false)
-        return false;
-      segmentIndex++;
-      previousCoords = currentCoord;
-    }) === false)
-      return false;
+    }
   });
 }
-function segmentReduce(geojson, callback, initialValue) {
-  var previousValue = initialValue;
-  var started = false;
-  segmentEach(geojson, function(currentSegment, featureIndex, multiFeatureIndex, geometryIndex, segmentIndex) {
-    if (started === false && initialValue === void 0)
-      previousValue = currentSegment;
-    else
-      previousValue = callback(previousValue, currentSegment, featureIndex, multiFeatureIndex, geometryIndex, segmentIndex);
-    started = true;
-  });
-  return previousValue;
+function ye(e, s, t) {
+  var r = t, i = !1;
+  return _e(e, function(a, u, l, o, n) {
+    i === !1 && t === void 0 ? r = a : r = s(r, a, u, l, o, n), i = !0;
+  }), r;
 }
-function length(geojson, options) {
-  options = options || {};
-  if (!isObject(options))
+function ge(e, s) {
+  if (s = s || {}, !z(s))
     throw new Error("options is invalid");
-  if (!geojson)
+  if (!e)
     throw new Error("geojson is required");
-  return segmentReduce(geojson, function(previousValue, segment) {
-    var coords = segment.geometry.coordinates;
-    return previousValue + distance(coords[0], coords[1], options);
+  return ye(e, function(t, r) {
+    var i = r.geometry.coordinates;
+    return t + me(i[0], i[1], s);
   }, 0);
 }
-function area(geojson) {
-  return geomReduce(geojson, function(value, geom) {
-    return value + calculateArea(geom);
+function ve(e) {
+  return pe(e, function(s, t) {
+    return s + se(t);
   }, 0);
 }
-var RADIUS = 6378137;
-function calculateArea(geojson) {
-  var area2 = 0, i;
-  switch (geojson.type) {
+var K = 6378137;
+function se(e) {
+  var s = 0, t;
+  switch (e.type) {
     case "Polygon":
-      return polygonArea(geojson.coordinates);
+      return Q(e.coordinates);
     case "MultiPolygon":
-      for (i = 0; i < geojson.coordinates.length; i++) {
-        area2 += polygonArea(geojson.coordinates[i]);
-      }
-      return area2;
+      for (t = 0; t < e.coordinates.length; t++)
+        s += Q(e.coordinates[t]);
+      return s;
     case "Point":
     case "MultiPoint":
     case "LineString":
     case "MultiLineString":
       return 0;
     case "GeometryCollection":
-      for (i = 0; i < geojson.geometries.length; i++) {
-        area2 += calculateArea(geojson.geometries[i]);
-      }
-      return area2;
+      for (t = 0; t < e.geometries.length; t++)
+        s += se(e.geometries[t]);
+      return s;
   }
 }
-function polygonArea(coords) {
-  var area2 = 0;
-  if (coords && coords.length > 0) {
-    area2 += Math.abs(ringArea(coords[0]));
-    for (var i = 1; i < coords.length; i++) {
-      area2 -= Math.abs(ringArea(coords[i]));
-    }
+function Q(e) {
+  var s = 0;
+  if (e && e.length > 0) {
+    s += Math.abs(X(e[0]));
+    for (var t = 1; t < e.length; t++)
+      s -= Math.abs(X(e[t]));
   }
-  return area2;
+  return s;
 }
-function ringArea(coords) {
-  var p1;
-  var p2;
-  var p3;
-  var lowerIndex;
-  var middleIndex;
-  var upperIndex;
-  var i;
-  var area2 = 0;
-  var coordsLength = coords.length;
-  if (coordsLength > 2) {
-    for (i = 0; i < coordsLength; i++) {
-      if (i === coordsLength - 2) {
-        lowerIndex = coordsLength - 2;
-        middleIndex = coordsLength - 1;
-        upperIndex = 0;
-      } else if (i === coordsLength - 1) {
-        lowerIndex = coordsLength - 1;
-        middleIndex = 0;
-        upperIndex = 1;
-      } else {
-        lowerIndex = i;
-        middleIndex = i + 1;
-        upperIndex = i + 2;
-      }
-      p1 = coords[lowerIndex];
-      p2 = coords[middleIndex];
-      p3 = coords[upperIndex];
-      area2 += (rad(p3[0]) - rad(p1[0])) * Math.sin(rad(p2[1]));
-    }
-    area2 = area2 * RADIUS * RADIUS / 2;
+function X(e) {
+  var s, t, r, i, a, u, l, o = 0, n = e.length;
+  if (n > 2) {
+    for (l = 0; l < n; l++)
+      l === n - 2 ? (i = n - 2, a = n - 1, u = 0) : l === n - 1 ? (i = n - 1, a = 0, u = 1) : (i = l, a = l + 1, u = l + 2), s = e[i], t = e[a], r = e[u], o += (O(r[0]) - O(s[0])) * Math.sin(O(t[1]));
+    o = o * K * K / 2;
   }
-  return area2;
+  return o;
 }
-function rad(_) {
-  return _ * Math.PI / 180;
+function O(e) {
+  return e * Math.PI / 180;
 }
-function pad(num) {
-  return num < 10 ? "0" + num.toString() : num.toString();
+function $(e) {
+  return e < 10 ? "0" + e.toString() : e.toString();
 }
-function ddToDms(coordinate, posSymbol, negSymbol) {
-  const dd = Math.abs(coordinate), d = Math.floor(dd), m = Math.floor((dd - d) * 60), s = Math.round((dd - d - m / 60) * 3600 * 100) / 100, directionSymbol = dd === coordinate ? posSymbol : negSymbol;
-  return pad(d) + "\xB0 " + pad(m) + "' " + pad(s) + '" ' + directionSymbol;
+function Y(e, s, t) {
+  const r = Math.abs(e), i = Math.floor(r), a = Math.floor((r - i) * 60), u = Math.round((r - i - a / 60) * 3600 * 100) / 100, l = r === e ? s : t;
+  return $(i) + "\xB0 " + $(a) + "' " + $(u) + '" ' + l;
 }
-function calc(L, latlngs) {
-  const last = latlngs[latlngs.length - 1];
-  const path = latlngs.map((latlng) => [latlng.lat, latlng.lng]);
-  const polyline = L.polyline(path), polygon = L.polygon(path);
-  const meters = length(polyline.toGeoJSON(), { units: "kilometers" }) * 1e3;
-  const sqMeters = area(polygon.toGeoJSON());
+function I(e, s) {
+  const t = s[s.length - 1], r = s.map((o) => [o.lat, o.lng]), i = e.polyline(r), a = e.polygon(r), u = ge(i.toGeoJSON(), { units: "kilometers" }) * 1e3, l = ve(a.toGeoJSON());
   return {
     lastCoord: {
       dd: {
-        x: last.lng,
-        y: last.lat
+        x: t.lng,
+        y: t.lat
       },
       dms: {
-        x: ddToDms(last.lng, "E", "W"),
-        y: ddToDms(last.lat, "N", "S")
+        x: Y(t.lng, "E", "W"),
+        y: Y(t.lat, "N", "S")
       }
     },
-    length: meters,
-    area: sqMeters
+    length: u,
+    area: l
   };
 }
-function selectOne(selector, el) {
-  if (!el) {
-    el = document;
-  }
-  return el.querySelector(selector);
+function v(e, s) {
+  return s || (s = document), s.querySelector(e);
 }
-function hide(el) {
-  if (el) {
-    el.setAttribute("style", "display:none;");
-    return el;
-  }
+function w(e) {
+  if (e)
+    return e.setAttribute("style", "display:none;"), e;
 }
-function show(el) {
-  if (el) {
-    el.removeAttribute("style");
-    return el;
-  }
+function E(e) {
+  if (e)
+    return e.removeAttribute("style"), e;
 }
-const DEFAULT_OPTIONS = {
+const Me = {
   activeColor: "#ABE67E",
   completedColor: "#C8F2BE"
 };
-class Symbology {
-  constructor(L, options) {
-    this._options = L.extend({}, DEFAULT_OPTIONS, this._options, options);
+class be {
+  constructor(s, t) {
+    this._options = s.extend({}, Me, this._options, t);
   }
-  getSymbol(name) {
-    const symbols = {
+  getSymbol(s) {
+    return {
       measureDrag: {
-        clickable: false,
+        clickable: !1,
         radius: 4,
         color: this._options.activeColor,
         weight: 2,
@@ -523,22 +424,22 @@ class Symbology {
         className: "layer-measuredrag"
       },
       measureArea: {
-        clickable: false,
-        stroke: false,
+        clickable: !1,
+        stroke: !1,
         fillColor: this._options.activeColor,
         fillOpacity: 0.2,
         className: "layer-measurearea"
       },
       measureBoundary: {
-        clickable: false,
+        clickable: !1,
         color: this._options.activeColor,
         weight: 2,
         opacity: 0.9,
-        fill: false,
+        fill: !1,
         className: "layer-measureboundary"
       },
       measureVertex: {
-        clickable: false,
+        clickable: !1,
         radius: 4,
         color: this._options.activeColor,
         weight: 2,
@@ -548,7 +449,7 @@ class Symbology {
         className: "layer-measurevertex"
       },
       measureVertexActive: {
-        clickable: false,
+        clickable: !1,
         radius: 4,
         color: this._options.activeColor,
         weight: 2,
@@ -558,7 +459,7 @@ class Symbology {
         className: "layer-measurevertex active"
       },
       resultArea: {
-        clickable: true,
+        clickable: !0,
         color: this._options.completedColor,
         weight: 2,
         opacity: 0.9,
@@ -567,15 +468,15 @@ class Symbology {
         className: "layer-measure-resultarea"
       },
       resultLine: {
-        clickable: true,
+        clickable: !0,
         color: this._options.completedColor,
         weight: 3,
         opacity: 0.9,
-        fill: false,
+        fill: !1,
         className: "layer-measure-resultline"
       },
       resultPoint: {
-        clickable: true,
+        clickable: !0,
         radius: 4,
         color: this._options.completedColor,
         weight: 2,
@@ -584,33 +485,20 @@ class Symbology {
         fillOpacity: 0.7,
         className: "layer-measure-resultpoint"
       }
-    };
-    return symbols[name];
+    }[s];
   }
 }
-function numberFormat(n, fixedDecimals = 0, locale = "pt-BR") {
-  if (isNaN(n))
-    return n;
-  if (fixedDecimals) {
-    return n == null ? void 0 : n.toLocaleString(locale, {
-      minimumFractionDigits: fixedDecimals,
-      maximumFractionDigits: fixedDecimals
-    });
-  }
-  if (n == 0)
-    return 0;
-  if (!n)
-    return "";
-  if (Number.isInteger(n)) {
-    return n.toLocaleString(locale);
-  }
-  return n.toLocaleString(locale, {
+function T(e, s = 0, t = "pt-BR") {
+  return isNaN(e) ? e : s ? e == null ? void 0 : e.toLocaleString(t, {
+    minimumFractionDigits: s,
+    maximumFractionDigits: s
+  }) : e == 0 ? 0 : e ? Number.isInteger(e) ? e.toLocaleString(t) : e.toLocaleString(t, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  });
+  }) : "";
 }
-function loadLeafletMeasure(L) {
-  L.Control.Measure = L.Control.extend({
+function ke(e) {
+  e.Control.Measure = e.Control.extend({
     _className: "leaflet-control-measure",
     options: {
       units: {},
@@ -631,189 +519,108 @@ function loadLeafletMeasure(L) {
       linePopupTemplateRef: null,
       resultsTemplateRef: null
     },
-    initialize: function(options) {
-      L.setOptions(this, options);
-      const { activeColor, completedColor } = this.options;
-      this._symbols = new Symbology(L, { activeColor, completedColor });
-      this.options.units = L.extend({}, units, this.options.units);
+    initialize: function(s) {
+      e.setOptions(this, s);
+      const { activeColor: t, completedColor: r } = this.options;
+      this._symbols = new be(e, { activeColor: t, completedColor: r }), this.options.units = e.extend({}, ne, this.options.units);
     },
-    onAdd: function(map) {
-      this._map = map;
-      this._latlngs = [];
-      this._initLayout();
-      map.on("click", this._collapse, this);
-      this._layer = L.layerGroup().addTo(map);
-      return this._container;
+    onAdd: function(s) {
+      return this._map = s, this._latlngs = [], this._initLayout(), s.on("click", this._collapse, this), this._layer = e.layerGroup().addTo(s), this._container;
     },
-    onRemove: function(map) {
-      map.off("click", this._collapse, this);
-      map.removeLayer(this._layer);
+    onRemove: function(s) {
+      s.off("click", this._collapse, this), s.removeLayer(this._layer);
     },
     _initLayout: function() {
-      const className = this._className, container = this._container = L.DomUtil.create(
+      const s = this._className, t = this._container = e.DomUtil.create(
         "div",
-        `${className} leaflet-bar`
+        `${s} leaflet-bar`
       );
-      container.innerHTML = this.options.controlTemplateRef.value.innerHTML;
-      container.setAttribute("aria-haspopup", true);
-      L.DomEvent.disableClickPropagation(container);
-      L.DomEvent.disableScrollPropagation(container);
-      const $toggle = this.$toggle = selectOne(".js-toggle", container);
-      this.$interaction = selectOne(".js-interaction", container);
-      const $start = selectOne(".js-start", container);
-      const $cancel = selectOne(".js-cancel", container);
-      const $finish = selectOne(".js-finish", container);
-      this.$startPrompt = selectOne(".js-startprompt", container);
-      this.$measuringPrompt = selectOne(".js-measuringprompt", container);
-      this.$startHelp = selectOne(".js-starthelp", container);
-      this.$results = selectOne(".js-results", container);
-      this.$measureTasks = selectOne(".js-measuretasks", container);
-      this._collapse();
-      this._updateMeasureNotStarted();
-      if (!L.Browser.android) {
-        L.DomEvent.on(container, "mouseenter", this._expand, this);
-        L.DomEvent.on(container, "mouseleave", this._collapse, this);
-      }
-      L.DomEvent.on($toggle, "click", L.DomEvent.stop);
-      if (L.Browser.touch) {
-        L.DomEvent.on($toggle, "click", this._expand, this);
-      } else {
-        L.DomEvent.on($toggle, "focus", this._expand, this);
-      }
-      L.DomEvent.on($start, "click", L.DomEvent.stop);
-      L.DomEvent.on($start, "click", this._startMeasure, this);
-      L.DomEvent.on($cancel, "click", L.DomEvent.stop);
-      L.DomEvent.on($cancel, "click", this._finishMeasure, this);
-      L.DomEvent.on($finish, "click", L.DomEvent.stop);
-      L.DomEvent.on($finish, "click", this._handleMeasureDoubleClick, this);
+      t.innerHTML = this.options.controlTemplateRef.value.innerHTML, t.setAttribute("aria-haspopup", !0), e.DomEvent.disableClickPropagation(t), e.DomEvent.disableScrollPropagation(t);
+      const r = this.$toggle = v(".js-toggle", t);
+      this.$interaction = v(".js-interaction", t);
+      const i = v(".js-start", t), a = v(".js-cancel", t), u = v(".js-finish", t);
+      this.$startPrompt = v(".js-startprompt", t), this.$measuringPrompt = v(".js-measuringprompt", t), this.$startHelp = v(".js-starthelp", t), this.$results = v(".js-results", t), this.$measureTasks = v(".js-measuretasks", t), this._collapse(), this._updateMeasureNotStarted(), e.Browser.android || (e.DomEvent.on(t, "mouseenter", this._expand, this), e.DomEvent.on(t, "mouseleave", this._collapse, this)), e.DomEvent.on(r, "click", e.DomEvent.stop), e.Browser.touch ? e.DomEvent.on(r, "click", this._expand, this) : e.DomEvent.on(r, "focus", this._expand, this), e.DomEvent.on(i, "click", e.DomEvent.stop), e.DomEvent.on(i, "click", this._startMeasure, this), e.DomEvent.on(a, "click", e.DomEvent.stop), e.DomEvent.on(a, "click", this._finishMeasure, this), e.DomEvent.on(u, "click", e.DomEvent.stop), e.DomEvent.on(u, "click", this._handleMeasureDoubleClick, this);
     },
     _expand: function() {
-      hide(this.$toggle);
-      show(this.$interaction);
+      w(this.$toggle), E(this.$interaction);
     },
     _collapse: function() {
-      if (!this._locked) {
-        hide(this.$interaction);
-        show(this.$toggle);
-      }
+      this._locked || (w(this.$interaction), E(this.$toggle));
     },
     _updateMeasureNotStarted: function() {
-      hide(this.$startHelp);
-      hide(this.$results);
-      hide(this.$measureTasks);
-      hide(this.$measuringPrompt);
-      show(this.$startPrompt);
+      w(this.$startHelp), w(this.$results), w(this.$measureTasks), w(this.$measuringPrompt), E(this.$startPrompt);
     },
     _updateMeasureStartedNoPoints: function() {
-      hide(this.$results);
-      show(this.$startHelp);
-      show(this.$measureTasks);
-      hide(this.$startPrompt);
-      show(this.$measuringPrompt);
+      w(this.$results), E(this.$startHelp), E(this.$measureTasks), w(this.$startPrompt), E(this.$measuringPrompt);
     },
     _updateMeasureStartedWithPoints: function() {
-      hide(this.$startHelp);
-      show(this.$results);
-      show(this.$measureTasks);
-      hide(this.$startPrompt);
-      show(this.$measuringPrompt);
+      w(this.$startHelp), E(this.$results), E(this.$measureTasks), w(this.$startPrompt), E(this.$measuringPrompt);
     },
     _startMeasure: function() {
-      this._locked = true;
-      this._measureVertexes = L.featureGroup().addTo(this._layer);
-      this._captureMarker = L.marker(this._map.getCenter(), {
-        clickable: true,
+      this._locked = !0, this._measureVertexes = e.featureGroup().addTo(this._layer), this._captureMarker = e.marker(this._map.getCenter(), {
+        clickable: !0,
         zIndexOffset: this.options.captureZIndex,
         opacity: 0,
-        autoPanOnFocus: false
-      }).addTo(this._layer);
-      this._setCaptureMarkerIcon();
-      this._captureMarker.on("mouseout", this._handleMapMouseOut, this).on("dblclick", this._handleMeasureDoubleClick, this).on("click", this._handleMeasureClick, this);
-      this._map.on("mousemove", this._handleMeasureMove, this).on("mouseout", this._handleMapMouseOut, this).on("move", this._centerCaptureMarker, this).on("resize", this._setCaptureMarkerIcon, this);
-      L.DomEvent.on(
+        autoPanOnFocus: !1
+      }).addTo(this._layer), this._setCaptureMarkerIcon(), this._captureMarker.on("mouseout", this._handleMapMouseOut, this).on("dblclick", this._handleMeasureDoubleClick, this).on("click", this._handleMeasureClick, this), this._map.on("mousemove", this._handleMeasureMove, this).on("mouseout", this._handleMapMouseOut, this).on("move", this._centerCaptureMarker, this).on("resize", this._setCaptureMarkerIcon, this), e.DomEvent.on(
         this._container,
         "mouseenter",
         this._handleMapMouseOut,
         this
-      );
-      this._updateMeasureStartedNoPoints();
-      this._map.fire("measurestart", null, false);
+      ), this._updateMeasureStartedNoPoints(), this._map.fire("measurestart", null, !1);
     },
     _finishMeasure: function() {
-      const model = L.extend({}, this._resultsModel, { points: this._latlngs });
-      this._locked = false;
-      L.DomEvent.off(
+      const s = e.extend({}, this._resultsModel, { points: this._latlngs });
+      this._locked = !1, e.DomEvent.off(
         this._container,
         "mouseover",
         this._handleMapMouseOut,
         this
-      );
-      this._clearMeasure();
-      this._captureMarker.off();
-      this._map.off("mousemove").off("mouseout").off("move").off("resize");
-      this._layer.removeLayer(this._measureVertexes).removeLayer(this._captureMarker);
-      this._measureVertexes = null;
-      this._updateMeasureNotStarted();
-      this._collapse();
-      this._map.fire("measurefinish", model, false);
+      ), this._clearMeasure(), this._captureMarker.off(), this._map.off("mousemove").off("mouseout").off("move").off("resize"), this._layer.removeLayer(this._measureVertexes).removeLayer(this._captureMarker), this._measureVertexes = null, this._updateMeasureNotStarted(), this._collapse(), this._map.fire("measurefinish", s, !1);
     },
     _clearMeasure: function() {
-      this._latlngs = [];
-      this._resultsModel = null;
-      this._measureVertexes.clearLayers();
-      if (this._measureDrag) {
-        this._layer.removeLayer(this._measureDrag);
-      }
-      if (this._measureArea) {
-        this._layer.removeLayer(this._measureArea);
-      }
-      if (this._measureBoundary) {
-        this._layer.removeLayer(this._measureBoundary);
-      }
-      this._measureDrag = null;
-      this._measureArea = null;
-      this._measureBoundary = null;
+      this._latlngs = [], this._resultsModel = null, this._measureVertexes.clearLayers(), this._measureDrag && this._layer.removeLayer(this._measureDrag), this._measureArea && this._layer.removeLayer(this._measureArea), this._measureBoundary && this._layer.removeLayer(this._measureBoundary), this._measureDrag = null, this._measureArea = null, this._measureBoundary = null;
     },
     _centerCaptureMarker: function() {
       this._captureMarker.setLatLng(this._map.getCenter());
     },
     _setCaptureMarkerIcon: function() {
       this._captureMarker.setIcon(
-        L.divIcon({
+        e.divIcon({
           iconSize: this._map.getSize().multiplyBy(2)
         })
       );
     },
-    _getMeasurementDisplayStrings: function(measurement) {
-      const unitDefinitions = this.options.units;
+    _getMeasurementDisplayStrings: function(s) {
+      const t = this.options.units;
       return {
-        lengthDisplay: buildDisplay(
-          measurement.length,
+        lengthDisplay: r(
+          s.length,
           this.options.primaryLengthUnit,
           this.options.secondaryLengthUnit
         ),
-        areaDisplay: buildDisplay(
-          measurement.area,
+        areaDisplay: r(
+          s.area,
           this.options.primaryAreaUnit,
           this.options.secondaryAreaUnit
         )
       };
-      function buildDisplay(val, primaryUnit, secondaryUnit) {
-        if (primaryUnit && unitDefinitions[primaryUnit]) {
-          let display = formatMeasure(val, unitDefinitions[primaryUnit]);
-          if (secondaryUnit && unitDefinitions[secondaryUnit]) {
-            const formatted = formatMeasure(
-              val,
-              unitDefinitions[secondaryUnit]
+      function r(a, u, l) {
+        if (u && t[u]) {
+          let o = i(a, t[u]);
+          if (l && t[l]) {
+            const n = i(
+              a,
+              t[l]
             );
-            display = `${display} (${formatted})`;
+            o = `${o} (${n})`;
           }
-          return display;
+          return o;
         }
-        return formatMeasure(val, null);
+        return i(a, null);
       }
-      function formatMeasure(val, unit) {
-        const unitDisplays = {
+      function i(a, u) {
+        const l = {
           acres: "acres",
           feet: "feet",
           kilometers: "kilometers",
@@ -823,375 +630,263 @@ function loadLeafletMeasure(L) {
           sqfeet: "sqfeet",
           sqmeters: "sqmeters",
           sqmiles: "sqmiles"
-        };
-        const u = L.extend({ factor: 1, decimals: 0 }, unit);
-        const formattedNumber = numberFormat(val * u.factor, u.decimals);
-        const label = unitDisplays[u.display] || u.display;
-        return [formattedNumber, label].join(" ");
+        }, o = e.extend({ factor: 1, decimals: 0 }, u), n = T(a * o.factor, o.decimals), f = l[o.display] || o.display;
+        return [n, f].join(" ");
       }
     },
     _updateResults: function() {
-      const calced = calc(L, this._latlngs);
-      this.options.model.value = this._resultsModel = L.extend(
+      const s = I(e, this._latlngs);
+      this.options.model.value = this._resultsModel = e.extend(
         {},
-        calced,
-        this._getMeasurementDisplayStrings(calced),
+        s,
+        this._getMeasurementDisplayStrings(s),
         {
           pointCount: this._latlngs.length
         }
-      );
-      setTimeout(() => {
+      ), setTimeout(() => {
         this.$results.innerHTML = this.options.resultsTemplateRef.value.innerHTML;
       }, 100);
     },
-    _handleMeasureMove: function(evt) {
-      if (!this._measureDrag) {
-        this._measureDrag = L.circleMarker(
-          evt.latlng,
-          this._symbols.getSymbol("measureDrag")
-        ).addTo(this._layer);
-      } else {
-        this._measureDrag.setLatLng(evt.latlng);
-      }
-      this._measureDrag.bringToFront();
+    _handleMeasureMove: function(s) {
+      this._measureDrag ? this._measureDrag.setLatLng(s.latlng) : this._measureDrag = e.circleMarker(
+        s.latlng,
+        this._symbols.getSymbol("measureDrag")
+      ).addTo(this._layer), this._measureDrag.bringToFront();
     },
     _handleMeasureDoubleClick: function() {
-      const latlngs = this._latlngs;
-      let resultFeature, popupContent;
-      this._finishMeasure();
-      if (!latlngs.length) {
+      const s = this._latlngs;
+      let t, r;
+      if (this._finishMeasure(), !s.length)
         return;
-      }
-      if (latlngs.length > 2) {
-        latlngs.push(latlngs[0]);
-      }
-      const calced = calc(L, latlngs);
-      if (latlngs.length === 1) {
-        resultFeature = L.circleMarker(
-          latlngs[0],
-          this._symbols.getSymbol("resultPoint")
-        );
-        this.options.model.value = calced;
-        popupContent = this.options.pointPopupTemplateRef.value;
-      } else if (latlngs.length === 2) {
-        resultFeature = L.polyline(
-          latlngs,
-          this._symbols.getSymbol("resultLine")
-        );
-        this.options.model.value = L.extend(
-          {},
-          calced,
-          this._getMeasurementDisplayStrings(calced)
-        );
-        popupContent = this.options.linePopupTemplateRef.value;
-      } else {
-        resultFeature = L.polygon(
-          latlngs,
-          this._symbols.getSymbol("resultArea")
-        );
-        this.options.model.value = L.extend(
-          {},
-          calced,
-          this._getMeasurementDisplayStrings(calced)
-        );
-        popupContent = this.options.areaPopupTemplateRef.value;
-      }
-      setTimeout(() => {
-        const popupContainer = L.DomUtil.create("div", "");
-        popupContainer.innerHTML = popupContent.innerHTML;
-        const zoomLink = selectOne(".js-zoomto", popupContainer);
-        if (zoomLink) {
-          L.DomEvent.on(zoomLink, "click", L.DomEvent.stop);
-          L.DomEvent.on(
-            zoomLink,
-            "click",
-            function() {
-              if (resultFeature.getBounds) {
-                this._map.fitBounds(resultFeature.getBounds(), {
-                  padding: [20, 20],
-                  maxZoom: 17
-                });
-              } else if (resultFeature.getLatLng) {
-                this._map.panTo(resultFeature.getLatLng());
-              }
-            },
-            this
-          );
-        }
-        const deleteLink = selectOne(".js-deletemarkup", popupContainer);
-        if (deleteLink) {
-          L.DomEvent.on(deleteLink, "click", L.DomEvent.stop);
-          L.DomEvent.on(
-            deleteLink,
-            "click",
-            function() {
-              this._layer.removeLayer(resultFeature);
-            },
-            this
-          );
-        }
-        resultFeature.addTo(this._layer);
-        resultFeature.bindPopup(popupContainer, this.options.popupOptions);
-        if (resultFeature.getBounds) {
-          resultFeature.openPopup(resultFeature.getBounds().getCenter());
-        } else if (resultFeature.getLatLng) {
-          resultFeature.openPopup(resultFeature.getLatLng());
-        }
+      s.length > 2 && s.push(s[0]);
+      const i = I(e, s);
+      s.length === 1 ? (t = e.circleMarker(
+        s[0],
+        this._symbols.getSymbol("resultPoint")
+      ), this.options.model.value = i, r = this.options.pointPopupTemplateRef.value) : s.length === 2 ? (t = e.polyline(
+        s,
+        this._symbols.getSymbol("resultLine")
+      ), this.options.model.value = e.extend(
+        {},
+        i,
+        this._getMeasurementDisplayStrings(i)
+      ), r = this.options.linePopupTemplateRef.value) : (t = e.polygon(
+        s,
+        this._symbols.getSymbol("resultArea")
+      ), this.options.model.value = e.extend(
+        {},
+        i,
+        this._getMeasurementDisplayStrings(i)
+      ), r = this.options.areaPopupTemplateRef.value), setTimeout(() => {
+        const a = e.DomUtil.create("div", "");
+        a.innerHTML = r.innerHTML;
+        const u = v(".js-zoomto", a);
+        u && (e.DomEvent.on(u, "click", e.DomEvent.stop), e.DomEvent.on(
+          u,
+          "click",
+          function() {
+            t.getBounds ? this._map.fitBounds(t.getBounds(), {
+              padding: [20, 20],
+              maxZoom: 17
+            }) : t.getLatLng && this._map.panTo(t.getLatLng());
+          },
+          this
+        ));
+        const l = v(".js-deletemarkup", a);
+        l && (e.DomEvent.on(l, "click", e.DomEvent.stop), e.DomEvent.on(
+          l,
+          "click",
+          function() {
+            this._layer.removeLayer(t);
+          },
+          this
+        )), t.addTo(this._layer), t.bindPopup(a, this.options.popupOptions), t.getBounds ? t.openPopup(t.getBounds().getCenter()) : t.getLatLng && t.openPopup(t.getLatLng());
       }, 100);
     },
-    _handleMeasureClick: function(evt) {
-      const latlng = this._map.mouseEventToLatLng(evt.originalEvent), lastClick = this._latlngs[this._latlngs.length - 1], vertexSymbol = this._symbols.getSymbol("measureVertex");
-      if (!lastClick || !latlng.equals(lastClick)) {
-        this._latlngs.push(latlng);
-        this._addMeasureArea(this._latlngs);
-        this._addMeasureBoundary(this._latlngs);
-        this._measureVertexes.eachLayer(function(layer) {
-          layer.setStyle(vertexSymbol);
-          if (layer._path) {
-            layer._path.setAttribute("class", vertexSymbol.className);
-          }
-        });
-        this._addNewVertex(latlng);
-        if (this._measureBoundary) {
-          this._measureBoundary.bringToFront();
-        }
-        this._measureVertexes.bringToFront();
-      }
-      this._updateResults();
-      this._updateMeasureStartedWithPoints();
+    _handleMeasureClick: function(s) {
+      const t = this._map.mouseEventToLatLng(s.originalEvent), r = this._latlngs[this._latlngs.length - 1], i = this._symbols.getSymbol("measureVertex");
+      (!r || !t.equals(r)) && (this._latlngs.push(t), this._addMeasureArea(this._latlngs), this._addMeasureBoundary(this._latlngs), this._measureVertexes.eachLayer(function(a) {
+        a.setStyle(i), a._path && a._path.setAttribute("class", i.className);
+      }), this._addNewVertex(t), this._measureBoundary && this._measureBoundary.bringToFront(), this._measureVertexes.bringToFront()), this._updateResults(), this._updateMeasureStartedWithPoints();
     },
     _handleMapMouseOut: function() {
-      if (this._measureDrag) {
-        this._layer.removeLayer(this._measureDrag);
-        this._measureDrag = null;
-      }
+      this._measureDrag && (this._layer.removeLayer(this._measureDrag), this._measureDrag = null);
     },
-    _addNewVertex: function(latlng) {
-      L.circleMarker(
-        latlng,
+    _addNewVertex: function(s) {
+      e.circleMarker(
+        s,
         this._symbols.getSymbol("measureVertexActive")
       ).addTo(this._measureVertexes);
     },
-    _addMeasureArea: function(latlngs) {
-      if (latlngs.length < 3) {
-        if (this._measureArea) {
-          this._layer.removeLayer(this._measureArea);
-          this._measureArea = null;
-        }
+    _addMeasureArea: function(s) {
+      if (s.length < 3) {
+        this._measureArea && (this._layer.removeLayer(this._measureArea), this._measureArea = null);
         return;
       }
-      if (!this._measureArea) {
-        this._measureArea = L.polygon(
-          latlngs,
-          this._symbols.getSymbol("measureArea")
-        ).addTo(this._layer);
-      } else {
-        this._measureArea.setLatLngs(latlngs);
-      }
+      this._measureArea ? this._measureArea.setLatLngs(s) : this._measureArea = e.polygon(
+        s,
+        this._symbols.getSymbol("measureArea")
+      ).addTo(this._layer);
     },
-    _addMeasureBoundary: function(latlngs) {
-      if (latlngs.length < 2) {
-        if (this._measureBoundary) {
-          this._layer.removeLayer(this._measureBoundary);
-          this._measureBoundary = null;
-        }
+    _addMeasureBoundary: function(s) {
+      if (s.length < 2) {
+        this._measureBoundary && (this._layer.removeLayer(this._measureBoundary), this._measureBoundary = null);
         return;
       }
-      if (!this._measureBoundary) {
-        this._measureBoundary = L.polyline(
-          latlngs,
-          this._symbols.getSymbol("measureBoundary")
-        ).addTo(this._layer);
-      } else {
-        this._measureBoundary.setLatLngs(latlngs);
-      }
+      this._measureBoundary ? this._measureBoundary.setLatLngs(s) : this._measureBoundary = e.polyline(
+        s,
+        this._symbols.getSymbol("measureBoundary")
+      ).addTo(this._layer);
     }
-  });
-  L.Map.mergeOptions({
-    measureControl: false
-  });
-  L.Map.addInitHook(function() {
-    if (this.options.measureControl) {
-      this.measureControl = new L.Control.Measure().addTo(this);
-    }
-  });
-  L.control.measure = function(options) {
-    return new L.Control.Measure(options);
+  }), e.Map.mergeOptions({
+    measureControl: !1
+  }), e.Map.addInitHook(function() {
+    this.options.measureControl && (this.measureControl = new e.Control.Measure().addTo(this));
+  }), e.control.measure = function(s) {
+    return new e.Control.Measure(s);
   };
 }
-var LMeasure_vue_vue_type_style_index_0_lang = "";
-const _hoisted_1 = { class: "templates" };
-const _hoisted_2 = /* @__PURE__ */ createStaticVNode('<a class="leaflet-control-measure-toggle js-toggle" href="#" title="Medir dist\xE2ncia e \xE1rea"> Medir </a><div class="leaflet-control-measure-interaction js-interaction"><div class="js-startprompt startprompt"><h3>Medir dist\xE2ncia e \xE1rea</h3><ul class="tasks"><a href="#" class="js-start start">Criar nova medida</a></ul></div><div class="js-measuringprompt"><h3>Medir dist\xE2ncia e \xE1rea</h3><p class="js-starthelp">Comece a medir adicionando pontos no mapa</p><div class="js-results results"></div><ul class="js-measuretasks tasks"><li><a href="#" class="js-cancel cancel">Cancelar</a></li><li><a href="#" class="js-finish finish">Finalizar</a></li></ul></div></div>', 2);
-const _hoisted_4 = [
-  _hoisted_2
-];
-const _hoisted_5 = /* @__PURE__ */ createElementVNode("h3", null, "Localiza\xE7\xE3o do ponto", -1);
-const _hoisted_6 = /* @__PURE__ */ createElementVNode("span", { class: "coorddivider" }, "/", -1);
-const _hoisted_7 = /* @__PURE__ */ createElementVNode("span", { class: "coorddivider" }, "/", -1);
-const _hoisted_8 = /* @__PURE__ */ createElementVNode("ul", { class: "tasks" }, [
-  /* @__PURE__ */ createElementVNode("li", null, [
-    /* @__PURE__ */ createElementVNode("a", {
+const Ce = { class: "templates" }, we = /* @__PURE__ */ oe('<a class="leaflet-control-measure-toggle js-toggle" href="#" title="Medir dist\xE2ncia e \xE1rea"> Medir </a><div class="leaflet-control-measure-interaction js-interaction"><div class="js-startprompt startprompt"><h3>Medir dist\xE2ncia e \xE1rea</h3><ul class="tasks"><a href="#" class="js-start start">Criar nova medida</a></ul></div><div class="js-measuringprompt"><h3>Medir dist\xE2ncia e \xE1rea</h3><p class="js-starthelp">Comece a medir adicionando pontos no mapa</p><div class="js-results results"></div><ul class="js-measuretasks tasks"><li><a href="#" class="js-cancel cancel">Cancelar</a></li><li><a href="#" class="js-finish finish">Finalizar</a></li></ul></div></div>', 2), Ee = [
+  we
+], Pe = /* @__PURE__ */ c("h3", null, "Localiza\xE7\xE3o do ponto", -1), De = /* @__PURE__ */ c("span", { class: "coorddivider" }, "/", -1), Se = /* @__PURE__ */ c("span", { class: "coorddivider" }, "/", -1), Te = /* @__PURE__ */ c("ul", { class: "tasks" }, [
+  /* @__PURE__ */ c("li", null, [
+    /* @__PURE__ */ c("a", {
       href: "#",
       class: "js-zoomto zoomto"
     }, "Centralizar no ponto")
   ]),
-  /* @__PURE__ */ createElementVNode("li", null, [
-    /* @__PURE__ */ createElementVNode("a", {
+  /* @__PURE__ */ c("li", null, [
+    /* @__PURE__ */ c("a", {
       href: "#",
       class: "js-deletemarkup deletemarkup"
     }, "Excluir")
   ])
-], -1);
-const _hoisted_9 = /* @__PURE__ */ createElementVNode("h3", null, "Medida de linha", -1);
-const _hoisted_10 = /* @__PURE__ */ createElementVNode("ul", { class: "tasks" }, [
-  /* @__PURE__ */ createElementVNode("li", null, [
-    /* @__PURE__ */ createElementVNode("a", {
+], -1), Ae = /* @__PURE__ */ c("h3", null, "Medida de linha", -1), Ne = /* @__PURE__ */ c("ul", { class: "tasks" }, [
+  /* @__PURE__ */ c("li", null, [
+    /* @__PURE__ */ c("a", {
       href: "#",
       class: "js-zoomto zoomto"
     }, "Centralizar na linha")
   ]),
-  /* @__PURE__ */ createElementVNode("li", null, [
-    /* @__PURE__ */ createElementVNode("a", {
+  /* @__PURE__ */ c("li", null, [
+    /* @__PURE__ */ c("a", {
       href: "#",
       class: "js-deletemarkup deletemarkup"
     }, "Excluir")
   ])
-], -1);
-const _hoisted_11 = /* @__PURE__ */ createElementVNode("h3", null, "\xC1rea", -1);
-const _hoisted_12 = /* @__PURE__ */ createElementVNode("ul", { class: "tasks" }, [
-  /* @__PURE__ */ createElementVNode("li", null, [
-    /* @__PURE__ */ createElementVNode("a", {
+], -1), xe = /* @__PURE__ */ c("h3", null, "\xC1rea", -1), Be = /* @__PURE__ */ c("ul", { class: "tasks" }, [
+  /* @__PURE__ */ c("li", null, [
+    /* @__PURE__ */ c("a", {
       href: "#",
       class: "js-zoomto zoomto"
     }, "Centralizar na \xE1rea")
   ]),
-  /* @__PURE__ */ createElementVNode("li", null, [
-    /* @__PURE__ */ createElementVNode("a", {
+  /* @__PURE__ */ c("li", null, [
+    /* @__PURE__ */ c("a", {
       href: "#",
       class: "js-deletemarkup deletemarkup"
     }, "Excluir")
   ])
-], -1);
-const _hoisted_13 = { class: "group" };
-const _hoisted_14 = /* @__PURE__ */ createElementVNode("p", { class: "lastpoint heading" }, "\xDAltimo ponto adicionado", -1);
-const _hoisted_15 = /* @__PURE__ */ createElementVNode("span", { class: "coorddivider" }, "/", -1);
-const _hoisted_16 = /* @__PURE__ */ createElementVNode("span", { class: "coorddivider" }, "/", -1);
-const _hoisted_17 = {
+], -1), Re = { class: "group" }, Oe = /* @__PURE__ */ c("p", { class: "lastpoint heading" }, "\xDAltimo ponto adicionado", -1), $e = /* @__PURE__ */ c("span", { class: "coorddivider" }, "/", -1), qe = /* @__PURE__ */ c("span", { class: "coorddivider" }, "/", -1), Le = {
   key: 0,
   class: "group"
-};
-const _hoisted_18 = /* @__PURE__ */ createElementVNode("span", { class: "heading" }, "Extens\xE3o da linha", -1);
-const _hoisted_19 = {
+}, ze = /* @__PURE__ */ c("span", { class: "heading" }, "Extens\xE3o da linha", -1), Ge = {
   key: 1,
   class: "group"
-};
-const _hoisted_20 = /* @__PURE__ */ createElementVNode("span", { class: "heading" }, "\xC1rea", -1);
-const _sfc_main = {
+}, je = /* @__PURE__ */ c("span", { class: "heading" }, "\xC1rea", -1), Ue = {
   __name: "LMeasure",
   props: ["mapRef"],
-  emits: ["ready"],
-  setup(__props, { emit }) {
-    const props = __props;
-    const WINDOW_OR_GLOBAL = typeof self === "object" && self.self === self && self || typeof global === "object" && global.global === global && global || void 0;
-    const { mapRef } = toRefs(props);
-    const controlTemplateRef = ref();
-    const pointPopupTemplateRef = ref();
-    const areaPopupTemplateRef = ref();
-    const linePopupTemplateRef = ref();
-    const resultsTemplateRef = ref();
-    const model = ref({});
-    const useGlobalLeaflet = inject("useGlobalLeaflet");
-    watch(mapRef, async (map) => {
-      const L = useGlobalLeaflet ? WINDOW_OR_GLOBAL.L : await import("leaflet/dist/leaflet-src.esm");
-      loadLeafletMeasure(L);
-      if (mapRef.value) {
-        new L.Control.Measure({
-          primaryLengthUnit: "meters",
-          secondaryLengthUnit: "kilometers",
-          primaryAreaUnit: "sqmeters",
-          secondaryAreaUnit: "sqkilometers",
-          controlTemplateRef,
-          pointPopupTemplateRef,
-          areaPopupTemplateRef,
-          linePopupTemplateRef,
-          resultsTemplateRef,
-          model
-        }).addTo(map);
-      }
-    });
-    return (_ctx, _cache) => {
-      var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p;
-      return openBlock(), createElementBlock("section", _hoisted_1, [
-        createElementVNode("section", {
+  setup(e) {
+    const s = e, t = typeof self == "object" && self.self === self && self || typeof global == "object" && global.global === global && global || void 0, { mapRef: r } = re(s), i = S(), a = S(), u = S(), l = S(), o = S(), n = S({}), f = ie("useGlobalLeaflet");
+    return ae(r, async (h) => {
+      const m = f ? t.L : await import("leaflet/dist/leaflet-src.esm");
+      ke(m), r.value && new m.Control.Measure({
+        primaryLengthUnit: "meters",
+        secondaryLengthUnit: "kilometers",
+        primaryAreaUnit: "sqmeters",
+        secondaryAreaUnit: "sqkilometers",
+        controlTemplateRef: i,
+        pointPopupTemplateRef: a,
+        areaPopupTemplateRef: u,
+        linePopupTemplateRef: l,
+        resultsTemplateRef: o,
+        model: n
+      }).addTo(h);
+    }), (h, m) => {
+      var d, M, P, A, b, D, _, k, g, G, j, V, U, F, H, W;
+      return B(), R("section", Ce, [
+        c("section", {
           ref_key: "controlTemplateRef",
-          ref: controlTemplateRef
-        }, _hoisted_4, 512),
-        createElementVNode("section", {
+          ref: i
+        }, Ee, 512),
+        c("section", {
           ref_key: "pointPopupTemplateRef",
-          ref: pointPopupTemplateRef
+          ref: a
         }, [
-          _hoisted_5,
-          createElementVNode("p", null, [
-            createTextVNode(toDisplayString((_b = (_a = model.value.lastCoord) == null ? void 0 : _a.dms) == null ? void 0 : _b.y) + " ", 1),
-            _hoisted_6,
-            createTextVNode(" " + toDisplayString((_d = (_c = model.value.lastCoord) == null ? void 0 : _c.dms) == null ? void 0 : _d.x), 1)
+          Pe,
+          c("p", null, [
+            C(y((M = (d = n.value.lastCoord) == null ? void 0 : d.dms) == null ? void 0 : M.y) + " ", 1),
+            De,
+            C(" " + y((A = (P = n.value.lastCoord) == null ? void 0 : P.dms) == null ? void 0 : A.x), 1)
           ]),
-          createElementVNode("p", null, [
-            createTextVNode(toDisplayString(unref(numberFormat)((_f = (_e = model.value.lastCoord) == null ? void 0 : _e.dd) == null ? void 0 : _f.y, 2)) + " ", 1),
-            _hoisted_7,
-            createTextVNode(" " + toDisplayString(unref(numberFormat)((_h = (_g = model.value.lastCoord) == null ? void 0 : _g.dd) == null ? void 0 : _h.x, 2)), 1)
+          c("p", null, [
+            C(y(N(T)((D = (b = n.value.lastCoord) == null ? void 0 : b.dd) == null ? void 0 : D.y, 2)) + " ", 1),
+            Se,
+            C(" " + y(N(T)((k = (_ = n.value.lastCoord) == null ? void 0 : _.dd) == null ? void 0 : k.x, 2)), 1)
           ]),
-          _hoisted_8
+          Te
         ], 512),
-        createElementVNode("section", {
+        c("section", {
           ref_key: "linePopupTemplateRef",
-          ref: linePopupTemplateRef
+          ref: l
         }, [
-          _hoisted_9,
-          createElementVNode("p", null, toDisplayString(model.value.lengthDisplay), 1),
-          _hoisted_10
+          Ae,
+          c("p", null, y(n.value.lengthDisplay), 1),
+          Ne
         ], 512),
-        createElementVNode("section", {
+        c("section", {
           ref_key: "areaPopupTemplateRef",
-          ref: areaPopupTemplateRef
+          ref: u
         }, [
-          _hoisted_11,
-          createElementVNode("p", null, toDisplayString(model.value.areaDisplay), 1),
-          createElementVNode("p", null, toDisplayString(model.value.lengthDisplay) + " de per\xEDmetro", 1),
-          _hoisted_12
+          xe,
+          c("p", null, y(n.value.areaDisplay), 1),
+          c("p", null, y(n.value.lengthDisplay) + " de per\xEDmetro", 1),
+          Be
         ], 512),
-        createElementVNode("section", {
+        c("section", {
           ref_key: "resultsTemplateRef",
-          ref: resultsTemplateRef
+          ref: o
         }, [
-          createElementVNode("div", _hoisted_13, [
-            _hoisted_14,
-            createElementVNode("p", null, [
-              createTextVNode(toDisplayString((_j = (_i = model.value.lastCoord) == null ? void 0 : _i.dms) == null ? void 0 : _j.y) + " ", 1),
-              _hoisted_15,
-              createTextVNode(" " + toDisplayString((_l = (_k = model.value.lastCoord) == null ? void 0 : _k.dms) == null ? void 0 : _l.x), 1)
+          c("div", Re, [
+            Oe,
+            c("p", null, [
+              C(y((G = (g = n.value.lastCoord) == null ? void 0 : g.dms) == null ? void 0 : G.y) + " ", 1),
+              $e,
+              C(" " + y((V = (j = n.value.lastCoord) == null ? void 0 : j.dms) == null ? void 0 : V.x), 1)
             ]),
-            createElementVNode("p", null, [
-              createTextVNode(toDisplayString(unref(numberFormat)((_n = (_m = model.value.lastCoord) == null ? void 0 : _m.dd) == null ? void 0 : _n.y, 2)) + " ", 1),
-              _hoisted_16,
-              createTextVNode(" " + toDisplayString(unref(numberFormat)((_p = (_o = model.value.lastCoord) == null ? void 0 : _o.dd) == null ? void 0 : _p.x, 2)), 1)
+            c("p", null, [
+              C(y(N(T)((F = (U = n.value.lastCoord) == null ? void 0 : U.dd) == null ? void 0 : F.y, 2)) + " ", 1),
+              qe,
+              C(" " + y(N(T)((W = (H = n.value.lastCoord) == null ? void 0 : H.dd) == null ? void 0 : W.x, 2)), 1)
             ])
           ]),
-          model.value.pointCount > 1 ? (openBlock(), createElementBlock("div", _hoisted_17, [
-            createElementVNode("p", null, [
-              _hoisted_18,
-              createTextVNode(" " + toDisplayString(model.value.lengthDisplay), 1)
+          n.value.pointCount > 1 ? (B(), R("div", Le, [
+            c("p", null, [
+              ze,
+              C(" " + y(n.value.lengthDisplay), 1)
             ])
-          ])) : createCommentVNode("", true),
-          model.value.pointCount > 2 ? (openBlock(), createElementBlock("div", _hoisted_19, [
-            createElementVNode("p", null, [
-              _hoisted_20,
-              createTextVNode(" " + toDisplayString(model.value.areaDisplay), 1)
+          ])) : J("", !0),
+          n.value.pointCount > 2 ? (B(), R("div", Ge, [
+            c("p", null, [
+              je,
+              C(" " + y(n.value.areaDisplay), 1)
             ])
-          ])) : createCommentVNode("", true)
+          ])) : J("", !0)
         ], 512)
       ]);
     };
   }
 };
-export { _sfc_main as default };
+export {
+  Ue as default
+};

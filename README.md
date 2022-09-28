@@ -1,5 +1,5 @@
 # vue-leaflet-measure
-Coordinate, linear, and area measure control for vue-leaflet
+Coordinate, linear and area measure control for vue-leaflet
 based on https://github.com/ljagis/leaflet-measure
 
 ![](http://ljagis.github.io/leaflet-measure/assets/leaflet-measure.png)
@@ -24,7 +24,7 @@ import { LMap } from "@vue-leaflet/vue-leaflet";
 import LMeasure from "vue-leaflet-measure";
 
 import "leaflet/dist/leaflet.css";
-import "../node_modules/vue-leaflet-measure/dist/style.css";
+import "vue-leaflet-measure/dist/style.css";
 
 const mapRef = ref();
 
