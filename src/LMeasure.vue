@@ -114,13 +114,13 @@ const model = ref({});
 const useGlobalLeaflet = inject("useGlobalLeaflet");
 
 watch(mapRef, async (map) => {
-  const L = useGlobalLeaflet
-    ? WINDOW_OR_GLOBAL.L
-    : await import("leaflet/dist/leaflet-src.esm");
-
-  loadLeafletMeasure(L);
-
   if (mapRef.value) {
+    const L = useGlobalLeaflet
+      ? WINDOW_OR_GLOBAL.L
+      : await import("leaflet/dist/leaflet-src.esm");
+
+    loadLeafletMeasure(L);
+
     new L.Control.Measure({
       primaryLengthUnit: "meters",
       secondaryLengthUnit: "kilometers",

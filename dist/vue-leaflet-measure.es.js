@@ -522,7 +522,16 @@ function ke(e) {
     initialize: function(s) {
       e.setOptions(this, s);
       const { activeColor: t, completedColor: r } = this.options;
-      this._symbols = new be(e, { activeColor: t, completedColor: r }), this.options.units = e.extend({}, ne, this.options.units);
+      this._symbols = new be(e, { activeColor: t, completedColor: r }), this.options.units = e.extend({}, ne, this.options.units), this.mapEvents = {
+        mousemove: this._handleMeasureMove.bind(this),
+        mouseout: this._handleMapMouseOut.bind(this),
+        move: this._centerCaptureMarker.bind(this),
+        resize: this._setCaptureMarkerIcon.bind(this)
+      }, this.captureMarkerEvents = {
+        mouseout: this._handleMapMouseOut.bind(this),
+        dblclick: this._handleMeasureDoubleClick.bind(this),
+        click: this._handleMeasureClick.bind(this)
+      };
     },
     onAdd: function(s) {
       return this._map = s, this._latlngs = [], this._initLayout(), s.on("click", this._collapse, this), this._layer = e.layerGroup().addTo(s), this._container;
@@ -562,7 +571,7 @@ function ke(e) {
         zIndexOffset: this.options.captureZIndex,
         opacity: 0,
         autoPanOnFocus: !1
-      }).addTo(this._layer), this._setCaptureMarkerIcon(), this._captureMarker.on("mouseout", this._handleMapMouseOut, this).on("dblclick", this._handleMeasureDoubleClick, this).on("click", this._handleMeasureClick, this), this._map.on("mousemove", this._handleMeasureMove, this).on("mouseout", this._handleMapMouseOut, this).on("move", this._centerCaptureMarker, this).on("resize", this._setCaptureMarkerIcon, this), e.DomEvent.on(
+      }).addTo(this._layer), this._setCaptureMarkerIcon(), this._captureMarker.on(this.captureMarkerEvents), this._map.on(this.mapEvents), e.DomEvent.on(
         this._container,
         "mouseenter",
         this._handleMapMouseOut,
@@ -576,7 +585,7 @@ function ke(e) {
         "mouseover",
         this._handleMapMouseOut,
         this
-      ), this._clearMeasure(), this._captureMarker.off(), this._map.off("mousemove").off("mouseout").off("move").off("resize"), this._layer.removeLayer(this._measureVertexes).removeLayer(this._captureMarker), this._measureVertexes = null, this._updateMeasureNotStarted(), this._collapse(), this._map.fire("measurefinish", s, !1);
+      ), this._clearMeasure(), this._captureMarker.off(this.captureMarkerEvents), this._map.off(this.mapEvents), this._layer.removeLayer(this._measureVertexes).removeLayer(this._captureMarker), this._measureVertexes = null, this._updateMeasureNotStarted(), this._collapse(), this._map.fire("measurefinish", s, !1);
     },
     _clearMeasure: function() {
       this._latlngs = [], this._resultsModel = null, this._measureVertexes.clearLayers(), this._measureDrag && this._layer.removeLayer(this._measureDrag), this._measureArea && this._layer.removeLayer(this._measureArea), this._measureBoundary && this._layer.removeLayer(this._measureBoundary), this._measureDrag = null, this._measureArea = null, this._measureBoundary = null;
@@ -799,19 +808,21 @@ const Ce = { class: "templates" }, we = /* @__PURE__ */ oe('<a class="leaflet-co
   setup(e) {
     const s = e, t = typeof self == "object" && self.self === self && self || typeof global == "object" && global.global === global && global || void 0, { mapRef: r } = re(s), i = S(), a = S(), u = S(), l = S(), o = S(), n = S({}), f = ie("useGlobalLeaflet");
     return ae(r, async (h) => {
-      const m = f ? t.L : await import("leaflet/dist/leaflet-src.esm");
-      ke(m), r.value && new m.Control.Measure({
-        primaryLengthUnit: "meters",
-        secondaryLengthUnit: "kilometers",
-        primaryAreaUnit: "sqmeters",
-        secondaryAreaUnit: "sqkilometers",
-        controlTemplateRef: i,
-        pointPopupTemplateRef: a,
-        areaPopupTemplateRef: u,
-        linePopupTemplateRef: l,
-        resultsTemplateRef: o,
-        model: n
-      }).addTo(h);
+      if (r.value) {
+        const m = f ? t.L : await import("leaflet/dist/leaflet-src.esm");
+        ke(m), new m.Control.Measure({
+          primaryLengthUnit: "meters",
+          secondaryLengthUnit: "kilometers",
+          primaryAreaUnit: "sqmeters",
+          secondaryAreaUnit: "sqkilometers",
+          controlTemplateRef: i,
+          pointPopupTemplateRef: a,
+          areaPopupTemplateRef: u,
+          linePopupTemplateRef: l,
+          resultsTemplateRef: o,
+          model: n
+        }).addTo(h);
+      }
     }), (h, m) => {
       var d, M, P, A, b, D, _, k, g, G, j, V, U, F, H, W;
       return B(), R("section", Ce, [

@@ -34,6 +34,17 @@ export function loadLeafletMeasure(L) {
       const { activeColor, completedColor } = this.options;
       this._symbols = new Symbology(L, { activeColor, completedColor });
       this.options.units = L.extend({}, units, this.options.units);
+      this.mapEvents = {
+        mousemove: this._handleMeasureMove.bind(this),
+        mouseout:this._handleMapMouseOut.bind(this),
+        move: this._centerCaptureMarker.bind(this),
+        resize: this._setCaptureMarkerIcon.bind(this)
+      };
+      this.captureMarkerEvents = {
+        mouseout: this._handleMapMouseOut.bind(this),
+        dblclick: this._handleMeasureDoubleClick.bind(this),
+        click: this._handleMeasureClick.bind(this)
+      }
     },
     onAdd: function (map) {
       this._map = map;
@@ -137,16 +148,9 @@ export function loadLeafletMeasure(L) {
       }).addTo(this._layer);
       this._setCaptureMarkerIcon();
 
-      this._captureMarker
-        .on("mouseout", this._handleMapMouseOut, this)
-        .on("dblclick", this._handleMeasureDoubleClick, this)
-        .on("click", this._handleMeasureClick, this);
+      this._captureMarker.on(this.captureMarkerEvents);
 
-      this._map
-        .on("mousemove", this._handleMeasureMove, this)
-        .on("mouseout", this._handleMapMouseOut, this)
-        .on("move", this._centerCaptureMarker, this)
-        .on("resize", this._setCaptureMarkerIcon, this);
+      this._map.on(this.mapEvents);
 
       L.DomEvent.on(
         this._container,
@@ -174,9 +178,9 @@ export function loadLeafletMeasure(L) {
 
       this._clearMeasure();
 
-      this._captureMarker.off();
+      this._captureMarker.off(this.captureMarkerEvents);
 
-      this._map.off("mousemove").off("mouseout").off("move").off("resize");
+      this._map.off(this.mapEvents);
 
       this._layer
         .removeLayer(this._measureVertexes)
